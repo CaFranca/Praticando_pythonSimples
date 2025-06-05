@@ -1,21 +1,55 @@
+
 alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+            "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "z"]
 vogais = ["a", "e", "i", "o", "u"]
-distanciaA = int(0)
-distanciaB = int(0)
-entrada = input ()
-lista = []
-for i in entrada:
-    lista.append(i)
-for letra in lista:
+consoantes = [letra for letra in alfabeto if letra not in vogais]
 
+
+entrada = input()
+
+
+resultado = ""
+
+
+for letra in entrada:
     if letra in vogais:
-        print(f"a palavra {entrada} tem a vogal {letra}")
-    else:
-        print(f"a palavra {entrada} tem a consoante {letra}")
-        lista.insert(, "deu certo")
 
-print(lista)
+        resultado += letra
+    else:
+
+        resultado += letra
+
+
+        idx_letra = alfabeto.index(letra)
+        menor_dist = float('inf')
+        vogal_mais_proxima = ""
+
+        for vogal in vogais:
+            idx_vogal = alfabeto.index(vogal)
+            dist = abs(idx_letra - idx_vogal)
+
+            if dist < menor_dist:
+                menor_dist = dist
+                vogal_mais_proxima = vogal
+            elif dist == menor_dist:
+
+                if idx_vogal < alfabeto.index(vogal_mais_proxima):
+                    vogal_mais_proxima = vogal
+
+        resultado += vogal_mais_proxima
+
+
+        idx_cons = consoantes.index(letra)
+        if letra == "z":
+            proxima_cons = "z"
+        else:
+            proxima_cons = consoantes[idx_cons + 1]
+
+        resultado += proxima_cons
+
+
+print(resultado)
+
 
 
 
