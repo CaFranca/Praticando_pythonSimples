@@ -5,7 +5,43 @@
     #Se um amigo recebeu respostas para todas as suas mensagens, o Tempo de Resposta Total para esse amigo é a soma dos Tempos de Respostas para as mensagens desse amigo; 
     #caso contrário o Tempo de Resposta Total para esse amigo é -1.
 
-numRegistros = int(input)
+n = int(input())
+eventos = [input().split() for _ in range(n)]
+
+tempo = 0
+amigos = []
+entrada = []
+resposta = []
+
+for e in eventos:
+    tipo, x = e[0], int(e[1])
+    
+    if tipo == 'T':
+        tempo += x - 1  # tempo extra entre eventos
+    else:
+        tempo += 1
+        if x not in amigos:
+            amigos.append(x)
+            entrada.append(-1)
+            resposta.append(0)
+
+        idx = amigos.index(x)
+
+        if tipo == 'R':
+            entrada[idx] = tempo
+        elif tipo == 'E':
+            if entrada[idx] != -1:
+                resposta[idx] += tempo - entrada[idx]
+                entrada[idx] = -1  # marca que respondeu
+
+# Saída em ordem crescente dos amigos
+ordenados = sorted(zip(amigos, entrada, resposta))
+
+for id, pendente, tempo_total in ordenados:
+    print(id, tempo_total if pendente == -1 else -1)
+
+
+
 
 
 
