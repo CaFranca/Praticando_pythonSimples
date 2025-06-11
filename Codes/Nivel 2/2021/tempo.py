@@ -5,41 +5,37 @@
     #Se um amigo recebeu respostas para todas as suas mensagens, o Tempo de Resposta Total para esse amigo é a soma dos Tempos de Respostas para as mensagens desse amigo; 
     #caso contrário o Tempo de Resposta Total para esse amigo é -1.
 
-n = int(input())
-eventos = [input().split() for _ in range(n)]
+registros = int(input())
 
-tempo = 0
-amigos = []
-entrada = []
-resposta = []
+tempos_de_resposta = {}
+esperando_resposta = {}
+ultimo_tempo = 0
 
-for e in eventos:
-    tipo, x = e[0], int(e[1])
-    
+for i in range (registros):
+    entrada = input().split()
+    tipo = entrada [0]
+    num = int(entrada[1])
+
     if tipo == 'T':
-        tempo += x - 1  # tempo extra entre eventos
+        ultimo_tempo += num - 1
+
     else:
-        tempo += 1
-        if x not in amigos:
-            amigos.append(x)
-            entrada.append(-1)
-            resposta.append(0)
+        ultimo_tempo += 1
 
-        idx = amigos.index(x)
+    if tipo == 'R':
+        if num not in tempos_de_resposta:
+            tempos_de_resposta[num] = 0
+        esperando_resposta[num] = ultimo_tempo
+    elif tipo == 'E':
+        if num in esperando_resposta:
+            tempos_de_resposta[num] +=  ( ultimo_tempo - esperando_resposta[num] )
+            del esperando_resposta[num]
 
-        if tipo == 'R':
-            entrada[idx] = tempo
-        elif tipo == 'E':
-            if entrada[idx] != -1:
-                resposta[idx] += tempo - entrada[idx]
-                entrada[idx] = -1  # marca que respondeu
+for amigo in esperando_resposta:
+    tempos_de_resposta[amigo] = -1
 
-# Saída em ordem crescente dos amigos
-ordenados = sorted(zip(amigos, entrada, resposta))
-
-for id, pendente, tempo_total in ordenados:
-    print(id, tempo_total if pendente == -1 else -1)
-
+for amigo in sorted(tempos_de_resposta.keys()):
+    print(f'{amigo} {tempos_de_resposta[amigo]}')
 
 
 
